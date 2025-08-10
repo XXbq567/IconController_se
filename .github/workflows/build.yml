@@ -1,0 +1,27 @@
+# .github/workflows/build.yml
+name: Build Release
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install AutoHotkey
+        run: choco install autohotkey -y --no-progress
+      - name: Compile AHK to EXE
+        run: |
+          ahk2exe.exe /in src/IconController_se.ahk /out src/IconController_se.exe
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: IconController_se-Win-x64
+          path: src/IconController_se.exe
+      - if: startsWith(github.ref,'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: src/IconController_se.exe
