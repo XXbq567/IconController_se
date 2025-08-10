@@ -11,16 +11,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install AutoHotkey
+      - name: Install AutoHotkey via Chocolatey
         run: |
-          # 下载官方 zip 并解压
-          curl -L https://www.autohotkey.com/download/ahk-v1.zip -o ahk.zip
-          7z x ahk.zip -oahk
-          echo "AHK_COMPILER=$PWD/ahk/Compiler/Ahk2Exe.exe" >> $GITHUB_ENV
+          choco install autohotkey --no-progress --yes --version=1.1.36.02
+          echo "AHK_COMPILER=C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe" >> $GITHUB_ENV
 
       - name: Compile AHK to EXE
         run: |
-          & $env:AHK_COMPILER /in src/IconController_se.ahk /out src/IconController_se.exe
+          & "$env:AHK_COMPILER" /in src/IconController_se.ahk /out src/IconController_se.exe
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
