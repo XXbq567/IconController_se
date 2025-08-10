@@ -1,4 +1,3 @@
-; IconController_se.ahk
 #NoEnv
 #SingleInstance Force
 !q::
