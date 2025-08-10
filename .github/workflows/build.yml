@@ -11,16 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup AutoHotkey
+      - name: Install AutoHotkey
         run: |
-          choco install autohotkey --no-progress -y
-          echo "AHK_DIR=C:\Program Files\AutoHotkey" >> $GITHUB_ENV
+          # 下载官方 zip 并解压
+          curl -L https://www.autohotkey.com/download/ahk-v1.zip -o ahk.zip
+          7z x ahk.zip -oahk
+          echo "AHK_COMPILER=$PWD/ahk/Compiler/Ahk2Exe.exe" >> $GITHUB_ENV
 
       - name: Compile AHK to EXE
         run: |
-          & "$env:AHK_DIR\Compiler\Ahk2Exe.exe" \
-             /in  src/IconController_se.ahk \
-             /out src/IconController_se.exe
+          & $env:AHK_COMPILER /in src/IconController_se.ahk /out src/IconController_se.exe
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
